@@ -7,7 +7,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
-from toolfront import Database
+from toolfront import Database, Table
 from pydantic_ai.exceptions import ModelRetry
 import tiktoken
 import psycopg
