@@ -1,17 +1,5 @@
-# Quando gerar uma resposta que contenha dados tabulares, sempre retorne um JSON seguindo o seguinte formato:
-# {
-#     "resposta": "<texto narrativo explicativo>",
-#     "tabela": {
-#         "colunas": ["Nome", "Idade", "Cidade"],
-#         "dados": [
-#             ["Amanda Cristina Martinez", 28, "Rio de Janeiro"],
-#             ["Ana Beatriz Passos", 19, "São Paulo"]
-#         ]
-#     }
-# }
-
 # Contexto que guia o agente
-CONTEXT = """ Você é um assistente que responde perguntas sobre estudantes.
+CONTEXT = """ Você é um assistente que responde perguntas sobre construções e serviços dentro dessas construções.
 Quando gerar uma resposta que contenha dados tabulares siga o formato abaixo:
 1) inicie com "hasTable" na primeira linha.
 2) Coloque o campo de texto explicativo após 'texto:'
@@ -20,60 +8,91 @@ Quando gerar uma resposta que contenha dados tabulares siga o formato abaixo:
 
 Exemplo:
 hasTable
-texto:O nome completo dos alunos é:
-colunas:Alunos, Nome
-linhas:[Amanda, Amanda Cristina Martinez Da Rosa], [Ana, Ana Beatriz Passos Beggiato], [Davi, Davi De Oliveira Ferreira] 
+texto:Quais são os serviços de elevação do Residencial Solaris?
+colunas:id, tower, floor, apartment
+linhas:[2637259, A, 4, 10], [2638014, B, 5, 9], [2637479, A, 3, 8] 
 
 Se não houver tabela, apenas retorne normalmente.
-Todas as queries devem ser feitas na tabela "public.students". Não envie "public.students" na resposta, apenas se refira como 'a tabela'.
-A tabela 'students' possui as seguintes colunas, organizadas por grupos: 
-    Dados Pessoais: 
-    - name, socialName, preferredName, ismartEmail, phoneNumber, gender, sexualOrientation, raceEthnicity, hasDisability, linkedin 
-    Acadêmico: 
-    - transferredCourseOrUniversity, transferDate, currentCourseStart, currentCourseStartYear, currentCourseEnd, currentCourseEndYear, supportedCourseFormula, currentArea, universityType, currentAggregatedCourse, currentDetailedCourse, currentDetailedUniversity 
-    Localização: 
-    - currentCity, currentState, currentCountry, currentAggregatedLocation, groupedLocation, specificLocation 
-    Turno e Status: 
-    - currentShift, holderContractStatus, realStatus, realProfile, hrProfile, targetStatus, duplicatedTargetStatus, duplicatedCurrentStatus, targetAudience 
-    Entrada e Escola: 
-    - entryProgram, projectYears, entryYearClass, schoolNetwork, school, standardizedSchool 
-    Profissional: 
-    - working, opportunityType, details, sector, careerTrack, organization, website, startDate, endDate, compensation, partnerCompanies, topGlobalCompanies 
-    Conhecimentos e Idiomas: 
-    - languages, technicalKnowledge, officePackageKnowledge, wordProficiencyLevel, excelProficiencyLevel, powerPointProficiencyLevel 
-    Oportunidades: 
-    - internshipUnavailabilityReason, careerTrajectoryInterests, primaryInterest, secondaryInterest, intendedWorkingAreas, additionalAreaInterests, seekingProfessionalOpportunity, opportunitiesLookingFor, opportunityDetails 
-    Comentários: 
-    - comments, tag 
-    Cronograma: 
-    - Mensal abreviado: jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec 
-    - Mensal extenso: january, february, march, april, mayFull, june, july, august, september, october, november, december 
-    - Mensal série 2: january2, february2, march2, april2, may2, june2, july2, august2, september2, october2, november2, december2 
-    Use essas informações para montar queries SQL eficientes quando necessário, e retorne apenas a resposta pedida, sem repetir toda a tabela."""
+A tabela que contem as construções é a "public.constructions" e a tabela com os serviços é a "public.services"
+A tabela 'constructions' possui as seguintes colunas:
+    id
+    name
+    address
+    city
+    state
+    zip_code
+    start_date
+    expected_end_date
+    description
+    is_active
+    created_at
+    updated_at
+    finished_at
+
+A tabela 'services' possui as seguitnes colunas:
+    id
+    work_id (uuid da construção)
+    service_id
+    service_type_id
+    tower
+    floor
+    apartment
+    measurement_unit
+    service_description
+    stage (wall)
+    thickness
+    labor_quantity
+    material_quantity
+    worker_quantity
+    bonus
+    unit_of_measure
+    material_unit
+    is_active
+    is_done
+    created_at
+    updated_at
+    acronym
+    enviroment_type
+
+    Use essas informações para montar queries SQL eficientes quando necessário, e retorne apenas a resposta pedida."""
 
 # Colunas permitidas
 ALLOWED_COLUMNS = {
-    "name", "socialname", "preferredname", "ismartemail", "phonenumber", "gender",
-    "sexualorientation", "raceethnicity", "hasdisability", "linkedin",
-    "transferredcourseoruniversity", "transferdate", "currentcoursestart", "currentcoursestartyear",
-    "currentcourseend", "currentcourseendyear", "supportedcourseformula", "currentarea", "universitytype",
-    "currentaggregatedcourse", "currentdetailedcourse", "currentdetaileduniversity",
-    "currentcity", "currentstate", "currentcountry", "currentaggregatedlocation", "groupedlocation",
-    "specificlocation", "currentshift", "holdercontractstatus", "realstatus", "realprofile", "hrprofile",
-    "targetstatus", "duplicatedtargetstatus", "duplicatedcurrentstatus", "targetaudience",
-    "entryprogram", "projectyears", "entryyearclass", "schoolnetwork", "school", "standardizedschool",
-    "working", "opportunitytype", "details", "sector", "careertrack", "organization", "website",
-    "startdate", "enddate", "compensation", "partnercompanies", "topglobalcompanies",
-    "languages", "technicalknowledge", "officepackageknowledge", "wordproficiencylevel",
-    "excelproficiencylevel", "powerpointproficiencylevel",
-    "internshipunavailabilityreason", "careertrajectoryinterests", "primaryinterest", "secondaryinterest",
-    "intendedworkingareas", "additionalareainterests", "seekingprofessionalopportunity",
-    "opportunitieslookingfor", "opportunitydetails", "comments", "tag",
-    "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec",
-    "january", "february", "march", "april", "mayfull", "june", "july", "august",
-    "september", "october", "november", "december",
-    "january2", "february2", "march2", "april2", "may2", "june2", "july2", "august2",
-    "september2", "october2", "november2", "december2"
+    # Tabela constructions
+    "id",
+    "name",
+    "address",
+    "city",
+    "state",
+    "zip_code",
+    "start_date",
+    "expected_end_date",
+    "description",
+    "is_active",
+    "created_at",
+    "updated_at",
+    "finished_at",
+
+    # Tabela services
+    "work_id",
+    "service_id",
+    "service_type_id",
+    "tower",
+    "floor",
+    "apartment",
+    "measurement_unit",
+    "service_description",
+    "stage",
+    "thickness",
+    "labor_quantity",
+    "material_quantity",
+    "worker_quantity",
+    "bonus",
+    "unit_of_measure",
+    "material_unit",
+    "is_done",
+    "acronym",
+    "enviroment_type"
 }
 
 # Comandos SQL perigosos a bloquear
