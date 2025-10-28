@@ -70,7 +70,12 @@ def init_db_pool():
         with conn.cursor() as cur:
             cur.execute("SET search_path TO public;")
 
-    db = Database(DATABASE_URL)
+    db = Database(
+        DATABASE_URL,
+        tables=[
+            Table(name="constructions", schema="public"),
+            Table(name="services", schema="public"),
+        ])
     logger.info("Pool de conexões e Database inicializados.")
 
 def get_conn_from_pool():
@@ -138,8 +143,6 @@ def validate_sql_query(query: str) -> bool:
     if not q.strip().startswith("select"):
         return False
     if any(word in q for word in DANGEROUS_KEYWORDS):
-        return False
-    if "public.students" not in q and "students" not in q:
         return False
     match = re.search(r"select\s+(.*?)\s+from", q, re.DOTALL)
     if match:
