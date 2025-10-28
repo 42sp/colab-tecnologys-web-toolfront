@@ -58,7 +58,8 @@ JSON{"status": "connected"}
 
 ## 5. Endpoints DisponíveisA seguir, a lista de rotas (endpoints) que sua API oferece:
 
-Método | Endpoint      | Descrição                                             | Formato do Body (se aplicável)
-GET    | /health       | Checa a conexão com o banco de dados.                 | N/A 
-POST   | /ask          | Recebe uma pergunta para processamento.               | { "pergunta": "Qual é a capital do Brasil?" }
-POST   | /reconnect-db | Reinicializa o pool de conexões com o banco de dados. | N/A
+| Método | Endpoint      | Descrição                                             | Formato do Body (se aplicável)                                  |
+|---------|----------------|-------------------------------------------------------|------------------------------------------------------------------|
+| GET     | /health        | Checa a conexão com o banco de dados.                 | N/A                                                              |
+| POST    | /ask           | Recebe uma pergunta para processamento.               | `{ "pergunta": "Qual é a capital do Brasil?" }`                 |
+| POST    | /reconnect-db  | Reinicializa o pool de conexões com o banco de dados. | N/A                                                              |
