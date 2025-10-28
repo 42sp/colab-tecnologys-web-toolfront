@@ -166,9 +166,8 @@ origins = (
     ["http://localhost:5173"]
     if ENV == "development"
     else [
-        "https://colab-telles-empregabilidade-frontend.onrender.com",
+        "https://temp-tecnologys-web.eorpdr.easypanel.host",
         "https://temp-empregabilidade-toolfront.eorpdr.easypanel.host",
-        "https://temp-empregabilidade-frontend.eorpdr.easypanel.host"
     ]
 )
 
