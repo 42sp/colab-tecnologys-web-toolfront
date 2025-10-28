@@ -1,5 +1,4 @@
 # 🚀 Guia de Configuração e Execução do Projeto
----
 
 ## 1. Criar e Ativar o Ambiente Virtual
 
