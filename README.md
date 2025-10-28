@@ -43,7 +43,7 @@ uvicorn main:app --reload
 ```
 
 ### 📘 Explicação do Comando:
-```Bash
+```
 main: Nome do arquivo principal sem a extensão .py
 app: Nome da instância do seu aplicativo FastAPI (onde você define app = FastAPI(...)).
 --reload: Reinicia o servidor automaticamente quando detecta alterações no código (ideal para desenvolvimento).
@@ -53,7 +53,8 @@ app: Nome da instância do seu aplicativo FastAPI (onde você define app = FastA
 Após iniciar o servidor, verifique o status da aplicação acessando a URL de health check no navegador.
 Acesse:http://127.0.0.1:8000/health
 
-Deve retornar a seguinte resposta:JSON{"status": "connected"}
+Deve retornar a seguinte resposta:
+JSON{"status": "connected"}
 
 ## 5. Endpoints DisponíveisA seguir, a lista de rotas (endpoints) que sua API oferece:
 
