@@ -1,7 +1,4 @@
 # 🚀 Guia de Configuração e Execução do Projeto
-
-Este guia contém os passos essenciais para configurar, instalar as dependências e executar o servidor da API.
-
 ---
 
 ## 1. Criar e Ativar o Ambiente Virtual
