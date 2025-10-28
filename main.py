@@ -167,7 +167,7 @@ origins = (
     if ENV == "development"
     else [
         "https://temp-tecnologys-web.eorpdr.easypanel.host",
-        "https://temp-empregabilidade-toolfront.eorpdr.easypanel.host",
+        "https://temp-tecnologys-web.eorpdr.easypanel.host/chat"
     ]
 )
 
