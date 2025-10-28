@@ -70,12 +70,7 @@ def init_db_pool():
         with conn.cursor() as cur:
             cur.execute("SET search_path TO public;")
 
-    db = Database(
-        DATABASE_URL,
-        tables=[
-            Table(name="constructions", schema="public"),
-            Table(name="services", schema="public"),
-        ])
+    db = Database(DATABASE_URL,)
     logger.info("Pool de conexões e Database inicializados.")
 
 def get_conn_from_pool():
@@ -86,7 +81,7 @@ def get_conn_from_pool():
     
     for _ in range(3):
         try:
-            return db_pool.connection()  # <-- retorna o context manager corretamente
+            return db_pool.connection() 
         except Exception as e:
             logger.warning(f"Conexão inválida: {e}. Reinicializando pool...")
             init_db_pool()
